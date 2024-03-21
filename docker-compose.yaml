@@ -1,0 +1,66 @@
+version: '3'
+services:
+  postgrest_server:
+    image: postgrest/postgrest
+    ports:
+      - "3000:3000"
+    links:
+      - db:db
+    environment:
+      PGRST_DB_URI: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+      PGRST_DB_SCHEMA: ${PGRST_DB_SCHEMA}
+      PGRST_DB_ANON_ROLE: ${PGRST_DB_ANON_ROLE}
+      PGRST_SERVER_PROXY_URI: "http://127.0.0.1:3000"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:13.4-alpine
+    restart: always
+    ports:
+      - '5432:5432'
+    restart: always
+    environment:
+      &common-env
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATA: ${PGDATA}
+    volumes:
+        - db-data:/var/lib/postgresql/data/ces_database
+        - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d ces_db -U ng_admin"]
+      interval: 10s
+      retries: 30
+
+  ingest-and-process:
+    build:
+      context: ./backend
+    depends_on:
+      - postgres
+    environment:
+      <<: *common-env
+    entrypoint: ["sh", "-c", "sleep 10 && python ingest_and_process.py"]
+
+  streamlit:
+    build:
+      context: ./frontend
+    depends_on:
+    - ingest-and-process
+    ports:
+      - "8501:8501"
+
+  swagger:
+    image: swaggerapi/swagger-ui
+    ports:
+        - "8080:8080"
+    expose:
+        - "8080"
+    environment:
+        API_URL: http://127.0.0.1:3000/      
+
+volumes:
+    db-data:
