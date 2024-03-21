@@ -5,7 +5,6 @@ from backend.scripts.configuration.configuration import ConfigurationHelper, loa
 
 
 class TestConfiguration(unittest.TestCase):
-    # Defining Mock env vars
     mock_env_vars = {
         "POSTGRES_USER": "gabe",
         "POSTGRES_PASSWORD": "gabe_pw",

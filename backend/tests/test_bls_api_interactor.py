@@ -26,8 +26,6 @@ class MockModel(BaseModel):
     id: float
     name: str
 
-
-# A helper function to create a mock response object
 def mocked_requests_get(*args, **kwargs):
     class MockResponse:
         def __init__(self, json_data, status_code):
