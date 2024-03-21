@@ -209,16 +209,12 @@ class PlotlyFigureBuilder:
         fig.update_layout(annotations=annotations)
         fig.update_layout(title_text=title)
         return fig
-    
-    def plot_pie_chart(self,data ,title, labels, colors):
+
+    def plot_pie_chart(self, data, title, labels, colors):
         if colors is None:
             colors = self.standard_color_palette
-        
-        fig = go.Figure(data=[go.Pie(
-                    labels=labels,
-                    marker_colors=colors,
-                    values=data)])
+
+        fig = go.Figure(data=[go.Pie(labels=labels, marker_colors=colors, values=data)])
         fig.update_layout(title_text=title)
 
         return fig
-

@@ -17,12 +17,14 @@ we_data = fetch_data(base_url, we_suffix)
 
 we_x_values = [item["date"] for item in we_data]
 we_y_values = np.array(
-    [[item["women_employment_thousands"] for item in we_data],
-      [item["total_employment_thousands"] for item in we_data]]
+    [[item["women_employment_thousands"] for item in we_data], [item["total_employment_thousands"] for item in we_data]]
 )
 
 women_employment_fig = figbuilder.plot_comparative_line_graph(
-    x_data=we_x_values, y_matrix=we_y_values, title="Women Employment in Government over time", labels=["Women", "Total"]
+    x_data=we_x_values,
+    y_matrix=we_y_values,
+    title="Women Employment in Government over time",
+    labels=["Women", "Total"],
 )
 
 ## Women employment - Decades
@@ -53,25 +55,25 @@ empl_y_values = np.array(
 )
 
 employee_labels = ["Production", "Supervisory"]
-employee_colors = ['rgb(73, 105, 137)', 'rgb(88, 163, 153)']
+employee_colors = ["rgb(73, 105, 137)", "rgb(88, 163, 153)"]
 
 fig_employees = figbuilder.plot_comparative_line_graph(
-        x_data=empl_x_values,
-        y_matrix=empl_y_values,
-        title="Employee count - Supervisory vs production roles",
-        labels=employee_labels,
-        colors=employee_colors
-    )
+    x_data=empl_x_values,
+    y_matrix=empl_y_values,
+    title="Employee count - Supervisory vs production roles",
+    labels=employee_labels,
+    colors=employee_colors,
+)
 
 ## Pie chart
-empl_pie_data = [item[-1] for item in empl_y_values] # Last decade data
+empl_pie_data = [item[-1] for item in empl_y_values]  # Last decade data
 
 empl_pie_chart = figbuilder.plot_pie_chart(
-        data=empl_pie_data,
-        title="Supervisory vs production roles in the last decade",
-        labels=employee_labels,
-        colors=employee_colors
-    )
+    data=empl_pie_data,
+    title="Supervisory vs production roles in the last decade",
+    labels=employee_labels,
+    colors=employee_colors,
+)
 
 with col[0]:
     st.plotly_chart(women_employment_fig, use_container_width=True)
@@ -80,6 +82,3 @@ with col[0]:
 with col[1]:
     st.plotly_chart(we_dec_fig, use_container_width=True)
     st.plotly_chart(empl_pie_chart, use_container_width=True)
-
-    
-

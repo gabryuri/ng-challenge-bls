@@ -41,7 +41,7 @@ blsapi.retrieve_data(url_suffix="ce.series", model=SeriesDataValidator, table=Se
 blsapi.retrieve_data(url_suffix="ce.supersector", model=SuperSectorDataValidator, table=SuperSectorTable)
 blsapi.retrieve_data(url_suffix="ce.period", model=PeriodDataValidator, table=PeriodTable)
 blsapi.retrieve_data(url_suffix="ce.datatype", model=DatatypeDataValidator, table=DatatypeIndexesTable)
-# blsapi.retrieve_data(url_suffix="ce.data.0.AllCESSeries", model=CESSeriesDataValidator, table=CESSeriesTable)
+blsapi.retrieve_data(url_suffix="ce.data.0.AllCESSeries", model=CESSeriesDataValidator, table=CESSeriesTable)
 
 
 rdbms_interactor.run_sql_scripts_from_directory("models/database/")
